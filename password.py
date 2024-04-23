@@ -4,7 +4,7 @@ import threading
 import json
 import os
 
-MAXTHREADNUM = 24  # 线程数量
+MAXTHREADNUM = 2  # 线程数量
 correct_password = None  # 用于线程储存正确pwd
 
 
