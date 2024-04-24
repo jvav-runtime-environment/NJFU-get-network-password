@@ -10,7 +10,7 @@ correct_password = None  # 用于线程储存正确pwd
 
 def test(usrname, password, plm):
     # 测试pwd是否正确
-    url = f"http://10.51.2.20/drcom/login"
+    url = "http://10.51.2.20/drcom/login"
 
     params = {
         "callback": "dr1003",
