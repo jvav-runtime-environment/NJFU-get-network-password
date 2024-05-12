@@ -22,5 +22,5 @@
 ```
 
 * 先根据需要生成密码字典和用户名文件，分别置于`password.txt`和`username.txt`内
-* 设置`password.py`内的`MAXTHREADNUM`，用来控制最大线程数量
+* 设置`password.py`内的`MAXTHREADNUM`，用来控制最大线程数量，默认为1 (不要设置太大，会影响服务器)
 * 运行，等待结果
