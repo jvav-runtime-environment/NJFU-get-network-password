@@ -11,10 +11,6 @@ class ProgressBar:
 
         self.info = info
 
-        self.last_time = time.time()
-        self.last_progress = 0
-        self.speed = 0
-
     def reset(self):
         self.progress = 0
         self.finished = False
@@ -40,18 +36,8 @@ class ProgressBar:
             filled_width = int(self.width * percent)
             empty_width = self.width - filled_width
 
-            now = time.time()
-            if now - self.last_time >= 0.5:
-                progress_delta = self.progress - self.last_progress
-                time_delta = now - self.last_time
-
-                self.speed = progress_delta / time_delta
-
-                self.last_time = now
-                self.last_progress = self.progress
-
             print(
-                f"{self.info}: [{'=' * filled_width}{' ' * empty_width}]\t{percent*100:.2f}%\t{self.speed:.0f} it/s\t\r",
+                f"{self.info}: [{'=' * filled_width}{' ' * empty_width}]\t{percent*100:.2f}%\t{self.progress}/{self.total}\t\r",
                 end="",
             )
 
