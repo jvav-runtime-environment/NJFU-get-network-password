@@ -138,9 +138,10 @@ username_list = username_list[current_username:]
 with open("password.txt", "r") as f:
     password_list = f.readlines()
 password_list = [password.strip() for password in password_list]
-print(f"加载密码条数: {len(password_list)}\n")
+print(f"加载密码条数: {len(password_list)}")
 password_list = password_list[current_password:]
 
+print(f"当前启用线程数量: {MAXTHREADNUM}")
 
 for username in username_list:
 
