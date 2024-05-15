@@ -97,7 +97,6 @@ def thread_func(usrname, password):
         except Exception as e:
             log.error(f"Unknown expection, current: {(usrname, password)}")
             log.exception(e)
-            break
 
     MAXTHREADNUM += 1
 
