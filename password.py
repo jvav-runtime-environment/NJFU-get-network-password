@@ -42,12 +42,12 @@ def banner():
 
 def test(usrname, password, plm):
     # 测试pwd是否正确
-    url = "http://10.51.2.20/drcom/login"
+    url = "http://10.51.2.20:801/eportal/portal/login"
 
     params = {
         "callback": "dr1003",
         "login_method": "1",
-        "user_account": ",0," + usrname + "@" + plm,
+        "user_account": ",0,w" + usrname + "@" + plm,
         "user_password": password,
         "wlan_user_ip": "",
         "wlan_user_ipv6": "",
